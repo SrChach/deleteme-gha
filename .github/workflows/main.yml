@@ -26,4 +26,5 @@ jobs:
           version: '>= 363.0.0'
       - name: print-secret
         run: |-
-          echo "${gcloud projects list}"
+          echo "nope"
+          gcloud projects list
