@@ -5,6 +5,12 @@ on:
     branches:
       - dev
 
+env:
+  PROJECT_ID: 'webpages-364602'
+  GAR_LOCATION: 'us-south1' # TODO: update to your region
+  REPOSITORY: 'dev-external' # TODO: update to your Artifact Registry docker repository name
+  IMAGE: 'deleteme-gha'
+
 jobs:
   setup-build-publish-deploy:
     name: 'Setup, Build, Publish, and Deploy'
@@ -24,7 +30,20 @@ jobs:
         uses: 'google-github-actions/setup-gcloud@v2'
         with:
           version: '>= 363.0.0'
+      - name: Login to GAR
+        uses: docker/login-action@v3
+        with:
+          registry: ${GAR_LOCATION}-docker.pkg.dev
+          username: _json_key
+          password: ${{ secrets.GCP_SERVICE_ACCOUNT }}
       - name: print-secret
         run: |-
-          echo "nope"
-          gcloud projects list
+          DOCKER_TAG="${GAR_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${IMAGE}:${GITHUB_SHA}"
+          
+          docker build \
+            --tag "${DOCKER_TAG}" \
+            --build-arg GITHUB_SHA="${GITHUB_SHA}" \
+            --build-arg GITHUB_REF="${GITHUB_REF}" \
+            .
+
+          docker push ${DOCKER_TAG}
