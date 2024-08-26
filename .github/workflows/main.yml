@@ -15,3 +15,4 @@ jobs:
       - name: print-secret
         run: |-
           echo "hola github"
+          echo  ${{ secrets.GCP_SERVICE_ACCOUNT }}
