@@ -26,13 +26,21 @@ jobs:
       - uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: '${{ secrets.GCP_SERVICE_ACCOUNT }}'
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+        with:
+          version: '>= 363.0.0'
+      - name: 'Download from GSutil'
+        run: |-
+          gutil cp gs://srchach/proyects/techneek/dump.sql .
+          gutil cp gs://srchach/proyects/techneek/dump.sql ./proyect
       - name: Login to GAR
         uses: docker/login-action@v3
         with:
           registry: us-south1-docker.pkg.dev
           username: _json_key
           password: ${{ secrets.GCP_SERVICE_ACCOUNT }}
-      - name: print-secret
+      - name: build-and-push
         run: |-
           DOCKER_TAG="${GAR_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${IMAGE}:${GITHUB_SHA}"
           
