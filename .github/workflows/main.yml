@@ -1,0 +1,17 @@
+name: ci-build
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  setup-build-publish-deploy:
+    name: 'Setup, Build, Publish, and Deploy'
+    runs-on: 'ubuntu-latest'
+    environment: 'development'
+
+    steps:
+      - name: print-secret
+        run: |-
+          echo "hola github"
