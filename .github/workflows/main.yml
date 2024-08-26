@@ -32,8 +32,8 @@ jobs:
           version: '>= 363.0.0'
       - name: 'Download from GSutil'
         run: |-
-          gutil cp gs://srchach/proyects/techneek/dump.sql .
-          gutil cp gs://srchach/proyects/techneek/dump.sql ./proyect
+          gsutil cp gs://srchach/proyects/techneek/dump.sql .
+          gsutil cp gs://srchach/proyects/techneek/dump.sql ./proyect
       - name: Login to GAR
         uses: docker/login-action@v3
         with:
